@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2, h3 {
+            text-align: center;
+            color: #0056b3;
+        }
+
+        .post-list {
+            margin: 20px 0;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        .post-item {
+            border-bottom: 1px solid #ddd;
+            padding: 15px 0;
+            transition: background-color 0.3s;
+        }
+
+        .post-item:hover {
+            background-color: #f9f9f9;
+        }
+
+        .post-item h3 {
+            margin: 0 0 10px;
+            font-size: 24px;
+            color: #007bff;
+        }
+
+        .post-item p {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        .btn {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .delete-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus, textarea:focus {
+            border-color: #007bff;
+        }
+
+        textarea {
+            height: 150px;
+        }
+
+        .submit-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .submit-btn:hover {
+            background-color: #218838;
+        }
+
+        .home-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .home-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .date-filter {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .date-filter input[type="date"] {
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .filter-btn {
+            background-color: #6c757d;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .filter-btn:hover {
+            background-color: #5a6268;
+        }
+
+        .read-more {
+            background-color: #17a2b8;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .read-more:hover {
+            background-color: #138496;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-top: 1px solid #ddd;
+        }
+
+        footer p {
+            margin: 0;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Section for viewing posts -->
+        {% if page == 'index' %}
+            <h1>My Blog</h1>
+
+            <!-- Date Filter Form -->
+            <div class="date-filter">
+                <form action="{{ url_for('index') }}" method="POST">
+                    <label for="start_date">Start Date:</label>
+                    <input type="date" id="start_date" name="start_date" value="{{ start_date }}">
+                    <label for="end_date">End Date:</label>
+                    <input type="date" id="end_date" name="end_date" value="{{ end_date }}">
+                    <button type="submit" class="filter-btn">Filter</button>
+                </form>
+            </div>
+
+            <a href="{{ url_for('add_post') }}" class="btn">Add New Post</a>
+            <table class="post-list">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Content</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for post in posts %}
+                    <tr class="post-item">
+                        <td>{{ post.title }}</td>
+                        <td>
+                            {% if post.content|length > 100 %}
+                                {{ post.content[:100] }}...
+                                <a href="{{ url_for('post_detail', post_id=post.id) }}" class="read-more">Read More</a>
+                            {% else %}
+                                {{ post.content }}
+                            {% endif %}
+                        </td>
+                        <td>{{ post.date }}</td>
+                        <td>
+                            <a href="{{ url_for('edit_post', post_id=post.id) }}" class="btn">Edit</a>
+                            <form action="{{ url_for('delete_post', post_id=post.id) }}" method="POST" style="display:inline;">
+                                <button type="submit" class="btn delete-btn">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="4">No posts available.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        <!-- Section for adding a new post -->
+        {% elif page == 'add' %}
+            <h2>Add New Post</h2>
+            <form action="{{ url_for('add_post') }}" method="POST">
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" id="title" name="title" required>
+                </div>
+                <div class="form-group">
+                    <label for="content">Content</label>
+                    <textarea id="content" name="content" required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Submit</button>
+                <a href="{{ url_for('index') }}" class="home-btn">Back to Home</a>
+            </form>
+
+        <!-- Section for editing an existing post -->
+        {% elif page == 'edit' %}
+            <h2>Edit Post</h2>
+            <form action="{{ url_for('edit_post', post_id=post.id) }}" method="POST">
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" id="title" name="title" value="{{ post.title }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="content">Content</label>
+                    <textarea id="content" name="content" required>{{ post.content }}</textarea>
+                </div>
+                <button type="submit" class="submit-btn">Update Post</button>
+                <a href="{{ url_for('index') }}" class="home-btn">Back to Home</a>
+            </form>
+        {% endif %}
+
+    </div>
+</body>
+</html>
